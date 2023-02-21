@@ -1,0 +1,6 @@
+distances
+.venv
+osm
+images
+*.gpx
+.env
