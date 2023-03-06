@@ -23,10 +23,10 @@ pointids = list(points.keys())
 if len(points) != len(set(points.keys())):
     raise Exception('Point IDs are not unique')
 
-with open('osrm_distances.json') as f:
+with open('data/osrm_distances.json') as f:
     osrm_dist = json.load(f)
 
-with open('osrm_durations.json') as f:
+with open('data/osrm_durations.json') as f:
     osrm_dur = json.load(f)
 
 dist = {}

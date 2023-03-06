@@ -34,8 +34,8 @@ print('status', r.status_code)
 # print('distances') # meters
 # print(r.json()['distances'])
 
-with open('osrm_distances.json', 'w') as f:
+with open('data/osrm_distances.json', 'w') as f:
   json.dump(r.json()['distances'], f, indent=2)
 
-with open('osrm_durations.json', 'w') as f:
+with open('data/osrm_durations.json', 'w') as f:
   json.dump(r.json()['durations'], f, indent=2)
