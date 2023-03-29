@@ -10,7 +10,6 @@ gpx = gpxpy.parse(gpx_file)
 
 points = getWayPoints()
 pointids = list(points.keys())
-
 dist, dur = getDistAndDur(pointids)
 
 # random.seed(10)
@@ -34,28 +33,38 @@ for i in range(n):
     """
 
 # ...or n randomized tours without set start and endpoint
-n = 100
+n = 1000000
 for i in range(n):
-  tour = [i for i in range(1, 223)]
-  print(f'{round(i/n, 2)*100} %')
+    tour = [i for i in range(1, 223)]
 
-  random.shuffle(tour)
-  start = tour[0]
-  finish = tour[-1]
-    
-  # 2 opt algorithm
+    number = (int(round(i / n, 3) * 100))
+    if number % 10 == 0:
+        print(f'{number} %')
 
-  tour = algorithm("twoOpt", tour, dist)
-  solution = {
-        'start': start,
-        'finish': finish,
-        'distance': total_distance(tour, dist),
-        'duration': total_duration(tour, dur),
-        'tour': tour
-    }
-  solutions.append(solution)
-  
-with open('opt_distance_shuffletest.json', 'w') as f:
+    random.shuffle(tour)
+    start = tour[0]
+    finish = tour[-1]
+
+    # 2 opt algorithm
+
+    tour = algorithm("twoOpt", tour, dist)
+
+    if total_duration(tour, dur) < 172:
+        solution = {
+            'start': start,
+            'finish': finish,
+            'distance': total_distance(tour, dist),
+            'duration': total_duration(tour, dur),
+            'tour': tour
+        }
+        solutions.append(solution)
+
+with open('2opt830dur.json', 'w') as f:
     json.dump(solutions, f)
 
-tourEval('opt_distance_shuffletest.json')
+# tourEval('2opt.json')
+
+distributionPlot('2opt830dur.json')
+
+# drawNetwork('2opt.json', "distance")
+# drawNetwork('2opt.json', "duration")

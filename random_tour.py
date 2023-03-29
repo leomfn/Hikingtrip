@@ -35,10 +35,10 @@ def total_duration(tour):
     return total_dur / 60 / 60
 
 
-with open('osrm_distances.json') as f:
+with open('data/osrm_distances.json') as f:
   osrm_dist = json.load(f)
 
-with open('osrm_durations.json') as f:
+with open('data/osrm_durations.json') as f:
   osrm_dur = json.load(f)
 
 dist = {}
@@ -67,8 +67,8 @@ n = 1000
 
 for i in range(n):
   tour = [i for i in range(1, 223)]
+  print(f'{round(i / n, 3) * 100} %')
 
-  print(f'{round(i/n, 3)*100} %')
   
 
 

@@ -6,9 +6,7 @@ def twoOpt(tour, dist):
     finish = tour[1]
 
     improvement = True
-    runs = 0
     while improvement:
-        # print('run', runs)
         improvement = False
         for i in range(1, len(tour) - 2):
             for j in range(i + 1, len(tour) - 1):
@@ -18,9 +16,39 @@ def twoOpt(tour, dist):
                 if dist_test < dist_original:
                     tour[i:j + 1] = reversed(tour[i:j + 1])
                     improvement = True
-        runs += 1
-
     return tour
+
+def get_distance(node1, node2, dist):
+    return dist[node1-1][node2-1]
+
+def calculate_distance(tour, dist):
+    distance = 0
+    for i in range(len(tour)-1):
+        distance += get_distance(tour[i], tour[i+1], dist)
+    distance += get_distance(tour[-1], tour[0], dist)
+    return distance
+
+def threeOpt(tour, dist):
+    best_distance = calculate_distance(tour, dist)
+    improved = True
+    while improved:
+        improved = False
+        for i in range(1, len(tour)-4):
+            for j in range(i+2, len(tour)-2):
+                for k in range(j+2, len(tour)):
+                    new_tour = tour[:i] + tour[i:j][::-1] + tour[j:k][::-1] + tour[k:]
+                    new_distance = calculate_distance(new_tour, dist)
+                    if new_distance < best_distance:
+                        tour = new_tour
+                        best_distance = new_distance
+                        improved = True
+                        break
+                if improved:
+                    break
+            if improved:
+                break
+    return tour, best_distance
+
 
 
 #by chatGPT
