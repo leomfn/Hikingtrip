@@ -1,18 +1,29 @@
 import random
 from data import *
 from algorithms import *
+import time
 from tour_eval import *
 import matplotlib.pyplot as plt
+
+with open('2opt830.json') as f:
+    data = json.load(f)
+#data = [{"start": 2, "tour": [1,2,3,4]}, {"start": 2, "tour": [1,4,2,3]}]
+commonEdges = findCommonEdges(data)
+
+with open('2opt830_commonEdges.json', 'w') as f:
+    json.dump(commonEdges, f)
+exit()
+
+start_time = time.time()
 
 gpx_file = open("/Users/Lui/Documents/Semester 6/Bachelorarbeit/HWN_2021_11_15.gpx")
 
 gpx = gpxpy.parse(gpx_file)
 
 points = getWayPoints()
+exit()
 pointids = list(points.keys())
 dist, dur = getDistAndDur(pointids)
-
-# random.seed(10)
 
 solutions = []
 
@@ -33,23 +44,26 @@ for i in range(n):
     """
 
 # ...or n randomized tours without set start and endpoint
-n = 1000000
+n = 10000
+last = 0
 for i in range(n):
     tour = [i for i in range(1, 223)]
 
     number = (int(round(i / n, 3) * 100))
-    if number % 10 == 0:
+    if (number % 10 == 0) & (number != last):
+        last = number
         print(f'{number} %')
 
     random.shuffle(tour)
-    start = tour[0]
-    finish = tour[-1]
 
     # 2 opt algorithm
 
     tour = algorithm("twoOpt", tour, dist)
 
-    if total_duration(tour, dur) < 172:
+    start = tour[0]
+    finish = tour[-1]
+
+    if total_distance(tour, dist) < 830:
         solution = {
             'start': start,
             'finish': finish,
@@ -59,12 +73,12 @@ for i in range(n):
         }
         solutions.append(solution)
 
-with open('2opt830dur.json', 'w') as f:
+with open('2opt830_2.json', 'w') as f:
     json.dump(solutions, f)
 
 # tourEval('2opt.json')
-
-distributionPlot('2opt830dur.json')
+print("--- %s seconds ---" % (time.time() - start_time))
+#distributionPlot('2opt830_2.json')
 
 # drawNetwork('2opt.json', "distance")
 # drawNetwork('2opt.json', "duration")

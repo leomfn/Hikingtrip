@@ -7,9 +7,7 @@ import json
 from data import *
 from itertools import chain
 
-
-def tourEval(path):
-
+def histogr(path):
     df = pd.read_json(path)
     #print(df.head())
     #print(df["duration"].min())
@@ -55,11 +53,29 @@ def distributionPlot(path):
 
     plt.show()
 
+def tourMin(data, metric):
+    # tourdata can consist of many solutions, therefore extract the one with min duration and min distance
+    tourdata_min = {}
+
+    improvement = True
+    for tour in data:
+        if not bool(tourdata_min): # if tour is empty
+            tourdata_min = tour
+        elif tourdata_min.get(metric) > tour.get(metric):
+            tourdata_min = tour
+
+    tour = tourdata_min['tour']
+    start = tour[0]
+    finish = tour[-1]
+    # tour = tour[1:-1]
+    print(tourdata_min["tour"])
+    print(tourdata_min["distance"])
+    print(tourdata_min["duration"])
+    return tour
+
 def drawNetwork(tourdata, metric):
 
     points = getWayPoints()
-
-    pointids = list(points.keys())
 
     # tourdata can consist of many solutions, therefore extract the one with min duration and min distance
     tourdata_min = {}
@@ -74,10 +90,58 @@ def drawNetwork(tourdata, metric):
     tour = tourdata_min['tour']
     start = tour[0]
     finish = tour[-1]
-    # tour = tour[1:-1]
     print(tourdata_min["tour"])
     print(tourdata_min["distance"])
     print(tourdata_min["duration"])
+
+
+    fig, ax = plt.subplots()
+    fig.suptitle(f'{metric}: From HWN{start:03d} (green) to HWN{finish:03d} (red)')
+
+    lines, = ax.plot(
+        [points[p]['lon'] for p in tour],
+        [points[p]['lat'] for p in tour],
+        '-',
+        alpha=0.5
+    )
+
+    ax.scatter(
+        x=[points[p]['lon'] for p in points.keys()],
+        y=[points[p]['lat'] for p in points.keys()],
+        c='black',
+        s=10
+    )
+
+    # start point
+    ax.scatter(
+        x=points[start]['lon'],
+        y=points[start]['lat'],
+        c='lightgreen',
+        s=100
+    )
+
+    # end point
+    ax.scatter(
+        x=points[finish]['lon'],
+        y=points[finish]['lat'],
+        c='tomato',
+        s=100
+    )
+
+    plt.savefig('shortest_distance_tour.png')
+    plt.show()
+
+def drawNetworkFromTour(tour, metric):
+
+    points = getWayPoints()
+    pointids = list(points.keys())
+    dist, dur = getDistAndDur(pointids)
+
+    start = tour[0]
+    finish = tour[-1]
+    print(tour)
+    print(total_distance(tour, dist))
+    print(total_duration(tour, dur))
 
 
     fig, ax = plt.subplots()
@@ -197,3 +261,34 @@ def analyzeEdges(data, listLength):
         pair = sorted_counts[i][0]
         count = sorted_counts[i][1]
         print(f"Pair: {pair}, Count: {count}")
+
+def findCommonEdges(data):
+    # create dict with keys being the commonEdges from 1 to 222
+    commonEdges = {k: [] for k in range(223)}
+    del commonEdges[0]
+
+    for solution in data:
+        for number in solution["tour"]:
+            number_idx = solution["tour"].index(number)
+            if number_idx == (len(solution["tour"]) - 1):
+                break
+            elif (solution["tour"][number_idx+1] in commonEdges[number]):
+                continue
+            else:
+                commonEdges[number].append(solution["tour"][number_idx+1])
+                commonEdges[solution["tour"][number_idx + 1]].append(number)
+
+    for key, values in commonEdges.items():
+        values.sort()
+        print(key, " : ", values)
+
+    return commonEdges
+
+def loadCommonEdges():
+    with open('2opt830_commonEdges.json') as f:
+        commonEdges = json.load(f)
+    return commonEdges
+
+
+
+
