@@ -58,7 +58,7 @@ for i in range(n):
     """
 
 # ...or n randomized tours without set start and endpoint
-n = 1000
+n = 10000
 last = 0
 for i in range(n):
     tour = [i for i in range(1, 223)]
