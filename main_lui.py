@@ -87,6 +87,8 @@ for i in range(n):
         }
         solutions.append(solution)
 
+print(solutions)
+
 with open('2opt830_dur.json', 'w') as f:
     json.dump(solutions, f)
 
