@@ -31,12 +31,11 @@ with open('data/osrm_durations.json') as json_file:
 ###
 start_time = time.time()
 
-gpx_file = open("/data/HWN_2021_11_15.gpx")
+gpx_file = open("data/HWN_2021_11_15.gpx")
 
 gpx = gpxpy.parse(gpx_file)
 
 points = getWayPoints()
-exit()
 pointids = list(points.keys())
 dist, dur = getDistAndDur(pointids)
 
@@ -59,7 +58,7 @@ for i in range(n):
     """
 
 # ...or n randomized tours without set start and endpoint
-n = 1000000
+n = 100
 last = 0
 for i in range(n):
     tour = [i for i in range(1, 223)]
@@ -92,7 +91,7 @@ with open('2opt830_dur.json', 'w') as f:
     json.dump(solutions, f)
 
 # tourEval('2opt.json')
-print("--- %s seconds ---" % (time.time() - start_time))
+print("--- %s hours ---" % ((time.time() - start_time) / 3600))
 #distributionPlot('2opt830_2.json')
 
 # drawNetwork('2opt.json', "distance")
