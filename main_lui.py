@@ -58,7 +58,7 @@ for i in range(n):
     """
 
 # ...or n randomized tours without set start and endpoint
-n = 1000000
+n = 1000
 last = 0
 for i in range(n):
     tour = [i for i in range(1, 223)]
@@ -77,7 +77,7 @@ for i in range(n):
     start = tour[0]
     finish = tour[-1]
 
-    if total_distance(tour, dur) < 170:
+    if total_distance(tour, dur) < 190:
         solution = {
             'start': start,
             'finish': finish,
