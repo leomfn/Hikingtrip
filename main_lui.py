@@ -15,7 +15,7 @@ with open('2opt830_commonEdges.json', 'w') as f:
     json.dump(commonEdges, f)
 exit()"""
 
-### use common edges to change duration matrix
+"""### use common edges to change duration matrix
 # Opening JSON file with common edges
 with open('2opt830_commonEdges.json') as json_file:
     dict_commone_edges = json.load(json_file)
@@ -26,8 +26,7 @@ with open('data/osrm_durations.json') as json_file:
 
 # Print the type of data variable
 #print(dict_commone_edges["1"])
-#print(matrix_durations[0])
-exit()
+#print(matrix_durations[0])"""
 
 ###
 start_time = time.time()
@@ -60,7 +59,7 @@ for i in range(n):
     """
 
 # ...or n randomized tours without set start and endpoint
-n = 10000
+n = 1000000
 last = 0
 for i in range(n):
     tour = [i for i in range(1, 223)]
@@ -74,12 +73,12 @@ for i in range(n):
 
     # 2 opt algorithm
 
-    tour = algorithm("twoOpt", tour, dist)
+    tour = algorithm("twoOpt", tour, dur)
 
     start = tour[0]
     finish = tour[-1]
 
-    if total_distance(tour, dist) < 830:
+    if total_distance(tour, dur) < 170:
         solution = {
             'start': start,
             'finish': finish,
@@ -89,7 +88,7 @@ for i in range(n):
         }
         solutions.append(solution)
 
-with open('2opt830_2.json', 'w') as f:
+with open('2opt830_dur.json', 'w') as f:
     json.dump(solutions, f)
 
 # tourEval('2opt.json')

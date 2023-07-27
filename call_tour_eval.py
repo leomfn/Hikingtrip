@@ -10,22 +10,22 @@ with open('2opt830.json') as f:
 
 print("There are {} solutions.".format(len(data)))
 
-# checks for duplicates
-#duplicateTours(data)
+#checks for duplicates
+duplicateTours(data)
 
 #tourMin(data, "distance")
-#tourMin(data, "duration")
+tourMin(data, "duration")
 
-# draws network
+#draws network
 #drawNetwork(data, "duration")
 
-# analyzes which edges are most common
-#analyzeEdges(data, 50)
+#analyzes which edges are most common
+analyzeEdges(data, 50)
 
-df = pd.DataFrame(data)
+"""df = pd.DataFrame(data)
 df = df.loc[df["distance"] < 820]
 
 for tour in df["tour"]:
     drawNetworkFromTour(tour, "distance")
 
-print(df.loc[df["distance"] < 820])
+print(df.loc[df["distance"] < 820])"""
