@@ -10,7 +10,7 @@ start_time = time.time()
 #load duration and distance matrix
 #load dictionary with edges (5 nearest or determined by previous runs
 
-decision = "T1"
+decision = "R"
 
 if decision == "R":
     points = getWayPoints()
