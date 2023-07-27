@@ -8,38 +8,43 @@ import time
 start_time = time.time()
 
 #load duration and distance matrix
+#load dictionary with edges (5 nearest or determined by previous runs
 
-"""points = getWayPoints()
-pointids = list(points.keys())
-dist, dur = getDistAndDur(pointids)"""
-print("test")
+decision = "T1"
 
-dur = {1: {4: 1}, 2: {1: 4, 3: 3}, 3: {2: 1}, 4: {2: 2, 3: 2}}
-dist = {1: {2: 3, 3: 3}, 2: {3: 3, 4: 3}, 3: {4: 3}, 4: {2: 3, 3: 3}}
+if decision == "R":
+    points = getWayPoints()
+    pointids = list(points.keys())
+    dist, dur = getDistAndDur(pointids)
 
-"""dur = {1: {2: 5, 3: 2}, 2: {3: 1, 4: 1}, 3: {4: 1}, 4: {2: 1, 3: 1}}
-dist = {1: {2: 3, 3: 3}, 2: {3: 3, 4: 3}, 3: {4: 3}, 4: {2: 3, 3: 3}}"""
+    with open("2opt830_commonEdges.json") as json_file:
+        dict_edges = json.load(json_file)
+    starting_node = 81
 
-"""#load dictionary with edges (5 nearest or determined by previous runs
-with open("2opt830_commonEdges.json") as json_file:
-    dict_edges = json.load(json_file)"""
+elif decision == "T1":
+    dur = {1: {4: 1}, 2: {1: 4, 3: 3}, 3: {2: 1}, 4: {2: 2, 3: 2}}
+    dist = {1: {2: 3, 3: 3}, 2: {3: 3, 4: 3}, 3: {4: 3}, 4: {2: 3, 3: 3}}
 
-dict_edges = {
-    "1": [4],
-    "2": [1, 3],
-    "3": [2],
-    "4": [2, 3],
-}
-"""dict_edges = {
-    "1": [2, 3],
-    "2": [3, 4],
-    "3": [4],
-    "4": [2, 3],
-}"""
+    dict_edges = {
+        "1": [4],
+        "2": [1, 3],
+        "3": [2],
+        "4": [2, 3],
+    }
+    starting_node = 1
+
+elif decision == "T2":
+    dur = {1: {2: 5, 3: 2}, 2: {3: 1, 4: 1}, 3: {4: 1}, 4: {2: 1, 3: 1}}
+    dist = {1: {2: 3, 3: 3}, 2: {3: 3, 4: 3}, 3: {4: 3}, 4: {2: 3, 3: 3}}
+    dict_edges = {
+        "1": [2, 3],
+        "2": [3, 4],
+        "3": [4],
+        "4": [2, 3],
+    }
+    starting_node = 1
 
 #create permutations and save 2 shortest (considering the duration)
-
-starting_node = 1
 tours = all_ways_to_visit_nodes_starting_node(dict_edges, starting_node, dur)
 
 for tour in tours:
