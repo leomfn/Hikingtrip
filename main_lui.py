@@ -31,7 +31,7 @@ with open('data/osrm_durations.json') as json_file:
 ###
 start_time = time.time()
 
-gpx_file = open("/Users/Lui/Documents/Semester 6/Bachelorarbeit/HWN_2021_11_15.gpx")
+gpx_file = open("/data/HWN_2021_11_15.gpx")
 
 gpx = gpxpy.parse(gpx_file)
 
