@@ -12,6 +12,7 @@ start_time = time.time()
 """points = getWayPoints()
 pointids = list(points.keys())
 dist, dur = getDistAndDur(pointids)"""
+print("test")
 
 dur = {1: {4: 1}, 2: {1: 4, 3: 3}, 3: {2: 1}, 4: {2: 2, 3: 2}}
 dist = {1: {2: 3, 3: 3}, 2: {3: 3, 4: 3}, 3: {4: 3}, 4: {2: 3, 3: 3}}
