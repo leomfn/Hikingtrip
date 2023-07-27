@@ -27,10 +27,10 @@ def all_ways_to_visit_nodes(edges):
     return all_paths
 
 """edges = {
-    1: [4],
-    2: [1, 3],
-    3: [2],
-    4: [2, 3],
+    "1": [4],
+    "2": [1, 3],
+    "3": [2],
+    "4": [2, 3],
 }
 
 result = all_ways_to_visit_nodes(edges)
@@ -47,13 +47,23 @@ def find_all_paths_starting_node(graph, current_node, visited, path, best_path, 
 
     if len(path) == len(graph) and current_node != starting_node and len(best_path) < 1:
         best_path.append(path[:])
+        print(path)
+        result_dur = total_duration(path, dur)
+        print(result_dur)  # in hours
 
     elif len(path) == len(graph) and current_node != starting_node and total_duration(path, dur) < total_duration(best_path[0], dur):
         best_path.pop()
         best_path.append(path[:])
 
+        print(path)
+        result_dur = total_duration(path, dur)
+        print(result_dur)  # in hours
+        with open("solutions/tour_starting_1.json", 'w') as f:
+            json.dump([path, result_dur], f)
+        exit()
+
     else:
-        for neighbor in graph[current_node]:
+        for neighbor in graph[str(current_node)]:
             if neighbor not in visited:
                 find_all_paths_starting_node(graph, neighbor, visited, path, best_path, starting_node, dur)
 
