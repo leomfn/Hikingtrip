@@ -46,79 +46,85 @@ pointids = list(points.keys())
 dist, dur = getDistAndDur(pointids)
 
 solutions = []
-n = 1000000
+n = 50000
 last = 0
 
 # example for defined start and endpoint and randomly shuffled points between
-start = 9
-finish = 120
-for i in range(n):
-    number = (int(round(i / n, 3) * 100))
-    if (number % 10 == 0) & (number != last):
-        last = number
-        print(f'{number} %')
 
-    between = [i for i in range(1, 223)]
-    #between = [81, 120, 121,122, 169, 170, 1, 19, 136, 9, 11, 22, 10, 23, 24, 16, 6, 8, 2, 3, 4, 5, 30, 7, 25, 26, 28, 27, 85, 29, 35, 34, 32, 31, 33, 83, 84, 82, 80, 81, 120]
+start_nodes = [i for i in range(1, 111)]
+#start_nodes = [i for i in range(111, 223)]
+print(start_nodes)
+for start in start_nodes:
+    print(start)
+    #start = 9
+    #finish = 120
+    for i in range(n):
+        number = (int(round(i / n, 3) * 100))
+        if (number % 10 == 0) & (number != last):
+            last = number
+            print(f'{number} %')
 
-    random.shuffle(between)
-    between.remove(start)
-    #between.remove(finish)
+        between = [i for i in range(1, 223)]
+        #between = [81, 120, 121,122, 169, 170, 1, 19, 136, 9, 11, 22, 10, 23, 24, 16, 6, 8, 2, 3, 4, 5, 30, 7, 25, 26, 28, 27, 85, 29, 35, 34, 32, 31, 33, 83, 84, 82, 80, 81, 120]
+
+        random.shuffle(between)
+        between.remove(start)
+        #between.remove(finish)
+
+        #tour = [start] + between + [finish]
+        tour = [start] + between
+
+        # 2 opt algorithm
+
+        tour = algorithm("twoOpt", tour, dur)
+
+        start = tour[0]
+        finish = tour[-1]
+
+        if total_duration(tour, dur) < 171:
+            solution = {
+                'start': start,
+                'finish': finish,
+                'distance': total_distance(tour, dist),
+                'duration': total_duration(tour, dur),
+                'tour': tour
+            }
+            solutions.append(solution)
+
+    # ...or n randomized tours without set start and endpoint
+    """
+    for i in range(n):
+        tour = [i for i in range(1, 223)]
     
-    #tour = [start] + between + [finish]
-    tour = [start] + between
+        number = (int(round(i / n, 3) * 100))
+        if (number % 10 == 0) & (number != last):
+            last = number
+            print(f'{number} %')
+    
+        random.shuffle(tour)
+    
+        # 2 opt algorithm
+    
+        tour = algorithm("twoOpt", tour, dur)
+    
+        start = tour[0]
+        finish = tour[-1]
+    
+        if total_distance(tour, dur) < 200:
+            solution = {
+                'start': start,
+                'finish': finish,
+                'distance': total_distance(tour, dist),
+                'duration': total_duration(tour, dur),
+                'tour': tour
+            }
+            solutions.append(solution)"""
 
-    # 2 opt algorithm
+    print(start)
+    print(solutions)
 
-    tour = algorithm("twoOpt", tour, dur)
-
-    start = tour[0]
-    finish = tour[-1]
-
-    if total_duration(tour, dur) < 171:
-        solution = {
-            'start': start,
-            'finish': finish,
-            'distance': total_distance(tour, dist),
-            'duration': total_duration(tour, dur),
-            'tour': tour
-        }
-        print(solution)
-        solutions.append(solution)
-
-# ...or n randomized tours without set start and endpoint
-"""
-for i in range(n):
-    tour = [i for i in range(1, 223)]
-
-    number = (int(round(i / n, 3) * 100))
-    if (number % 10 == 0) & (number != last):
-        last = number
-        print(f'{number} %')
-
-    random.shuffle(tour)
-
-    # 2 opt algorithm
-
-    tour = algorithm("twoOpt", tour, dur)
-
-    start = tour[0]
-    finish = tour[-1]
-
-    if total_distance(tour, dur) < 200:
-        solution = {
-            'start': start,
-            'finish': finish,
-            'distance': total_distance(tour, dist),
-            'duration': total_duration(tour, dur),
-            'tour': tour
-        }
-        solutions.append(solution)"""
-
-print(solutions)
-
-"""with open('2opt830_dur.json', 'w') as f:
-    json.dump(solutions, f)"""
+with open('start_nodes_1_110.json', 'w') as f:
+    json.dump(solutions, f)
 
 # tourEval('2opt.json')
 print("--- %s hours ---" % ((time.time() - start_time) / 60))
