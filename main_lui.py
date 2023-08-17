@@ -46,7 +46,7 @@ pointids = list(points.keys())
 dist, dur = getDistAndDur(pointids)
 
 solutions = []
-n = 50000
+n = 40000
 last = 0
 
 # example for defined start and endpoint and randomly shuffled points between
