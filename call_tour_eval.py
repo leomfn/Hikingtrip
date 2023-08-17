@@ -17,7 +17,7 @@ duplicateTours(data)
 tourMin(data, "duration")
 
 #draws network
-#drawNetwork(data, "duration")
+drawNetwork(data, "duration")
 
 #analyzes which edges are most common
 analyzeEdges(data, 50)
