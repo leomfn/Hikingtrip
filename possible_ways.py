@@ -48,6 +48,7 @@ def find_all_paths_starting_node(graph, current_node, visited, path, best_path, 
     path.append(current_node)
 
     if len(path) == len_graph and current_node != starting_node and len(best_path) < 1:
+
         best_path.append(path[:])
         print(path)
         result_dur = total_duration(path, dur)
