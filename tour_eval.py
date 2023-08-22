@@ -57,7 +57,6 @@ def tourMin(data, metric):
     # tourdata can consist of many solutions, therefore extract the one with min duration and min distance
     tourdata_min = {}
 
-    improvement = True
     for tour in data:
         if not bool(tourdata_min): # if tour is empty
             tourdata_min = tour
@@ -71,6 +70,7 @@ def tourMin(data, metric):
     print(tourdata_min["tour"])
     print(tourdata_min["distance"])
     print(tourdata_min["duration"])
+    drawNetworkFromTour(tourdata_min["tour"], "distance")
     return tour
 
 def drawNetwork(tourdata, metric):
