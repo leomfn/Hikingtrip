@@ -8,10 +8,8 @@ import matplotlib.pyplot as plt
 eval = True
 
 if eval:
-    ### draw a specific tour
+    # draw a specific tour
     tour = [174, 15, 10, 6, 2, 1, 3, 4, 5, 30, 7, 16, 8, 9, 11, 14, 20, 21, 17, 13, 23, 24, 25, 26, 29, 85, 27, 28, 22, 156, 18, 168, 136, 19, 169, 120, 121, 122, 170]
-
-
     drawNetworkFromTour(tour, "duration")
     exit()
 

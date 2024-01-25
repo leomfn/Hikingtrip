@@ -6,7 +6,7 @@ from algorithms import *
 import random
 
 
-### test4 = solve path for interesting region
+### solve path for interesting region
 # 120 and 135 are missing and added after random shuffling
 # 120 and 135 are set for start and finish
 points = getWayPoints()

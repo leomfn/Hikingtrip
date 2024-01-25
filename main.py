@@ -3,7 +3,7 @@ import re
 import json
 import matplotlib.pyplot as plt
 
-gpx_file = open('HWN_2021_11_15.gpx')
+gpx_file = open('data/HWN_2021_11_15.gpx')
 
 gpx = gpxpy.parse(gpx_file)
 
@@ -18,7 +18,7 @@ for i, p in enumerate(gpx.waypoints):
 
 pointids = list(points.keys())
 
-# print(points)
+#print(points)
 
 if len(points) != len(set(points.keys())):
     raise Exception('Point IDs are not unique')
@@ -77,7 +77,7 @@ for i in range(len(point_combinations)):
 
     tour = [start] + residue + [finish]
 
-    # print(tour)
+    print(tour)
 
     # fig, ax = plt.subplots()
     # fig.suptitle(f'From HWN{start:03d} (green) to HWN{finish:03d} (red)')
@@ -154,5 +154,5 @@ for i in range(len(point_combinations)):
 
     solutions.append(solution)
 
-with open('opt_distance_solutions.json', 'w') as f:
-    json.dump(solutions, f)
+#with open('opt_distance_solutions.json', 'w') as f:
+#    json.dump(solutions, f)
