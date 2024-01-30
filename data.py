@@ -2,7 +2,6 @@ import json
 import re
 import gpxpy
 
-
 def getWayPoints():
     gpx_file = open("data/HWN_2021_11_15.gpx")
 

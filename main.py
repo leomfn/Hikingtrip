@@ -1,158 +1,114 @@
-import gpxpy
-import re
-import json
+import random
+from data import *
+from algorithms import *
+import time
+from tour_eval import *
 import matplotlib.pyplot as plt
 
-gpx_file = open('data/HWN_2021_11_15.gpx')
+start_time = time.time()
+
+draw = False
+
+# draw a specific tour
+if draw:
+    tour = [174, 15, 10, 6, 2, 1, 3, 4, 5, 30, 7, 16, 8, 9, 11, 14, 20, 21, 17, 13, 23, 24, 25, 26, 29, 85, 27, 28, 22, 156, 18, 168, 136, 19, 169, 120, 121, 122, 170]
+    drawNetworkFromTour(tour, "duration")
+    exit()
+
+# find tour with shortest duration/distance
+# data: 2 opt using each node as start node and filtered for low duration 
+"""with open('start_nodes_1_110.json') as f:
+    data = json.load(f)
+tour_min(data, "duration")
+tour_min(data, "distance")
+
+with open('start_nodes_111_222.json') as f:
+    data2 = json.load(f)
+tour_min(data2, "duration")
+tour_min(data2, "distance")
+exit()"""
+
+###
+gpx_file = open("data/HWN_2021_11_15.gpx")
 
 gpx = gpxpy.parse(gpx_file)
 
-points = {}
-
-for i, p in enumerate(gpx.waypoints):
-    points[int(re.search(r'\d+', p.name).group(0))] = {
-        'name': p.name,
-        'lon': p.longitude,
-        'lat': p.latitude
-    }
-
+points = getWayPoints()
 pointids = list(points.keys())
-
-#print(points)
-
-if len(points) != len(set(points.keys())):
-    raise Exception('Point IDs are not unique')
-
-with open('data/osrm_distances.json') as f:
-    osrm_dist = json.load(f)
-
-with open('data/osrm_durations.json') as f:
-    osrm_dur = json.load(f)
-
-dist = {}
-for i, distlist in enumerate(osrm_dist):
-    point_i = pointids[i]
-    dist[point_i] = {}
-    for j, d in enumerate(distlist):
-        point_j = pointids[j]
-        dist[point_i][point_j] = d
-
-dur = {}
-for i, durlist in enumerate(osrm_dur):
-    point_i = pointids[i]
-    dur[point_i] = {}
-    for j, d in enumerate(durlist):
-        point_j = pointids[j]
-        dur[point_i][point_j] = d
-
-
-def total_distance(tour):
-    """returns total distance in km"""
-    total_dist = 0
-    for i in range(len(tour) - 1):
-        total_dist = total_dist + dist[tour[i]][tour[i + 1]]
-    return total_dist / 1000
-
-
-def total_duration(tour):
-    """returns total duration in hours"""
-    total_dur = 0
-    for i in range(len(tour) - 1):
-        total_dur = total_dur + dur[tour[i]][tour[i + 1]]
-    return total_dur / 60 / 60
-
-
-point_combinations = [(i, j) for i in pointids for j in pointids]
+dist, dur = getDistAndDur(pointids)
 
 solutions = []
+n = 2
 
-for i in range(len(point_combinations)):
-    print(f'combination {i}/{len(point_combinations)}')
+# example for defined start and endpoint and randomly shuffled points between
 
-    start = point_combinations[i][0]
-    finish = point_combinations[i][1]
-    residue = list(filter(lambda p: p not in [start, finish], pointids))
+#start_nodes = [i for i in range(1, 111)]
+#start_nodes = [i for i in range(109, 111)]
+start_nodes = [9]
 
-    # print(start, finish)
+for start in start_nodes:
+    """
+    finish = 174
+    for i in range(n):
+        between = [i for i in range(1, 223)]
+        #between = [81, 80, 82, 84, 83, 33, 32, 31, 34, 35, 36, 37, 38, 39, 88, 89, 87, 59, 79, 77, 78, 76, 74, 71, 178, 72, 70, 73, 188, 187, 186, 185, 183, 196, 184, 189, 190, 191, 57, 68, 67, 69, 66, 64, 65, 62, 63, 54, 60, 53, 52, 56, 42, 41, 40, 174]
 
-    tour = [start] + residue + [finish]
+        random.shuffle(between)
+        between.remove(start)
+        between.remove(finish)
 
-    print(tour)
+        tour = [start] + between + [finish]
+        #tour = [start] + between
+        #tour = between + [finish]
 
-    # fig, ax = plt.subplots()
-    # fig.suptitle(f'From HWN{start:03d} (green) to HWN{finish:03d} (red)')
+        # 2 opt algorithm
+        tour = algorithm("twoOpt", tour, dur)
 
-    # # start piont
-    # ax.scatter(
-    #     x=points[start]['lon'],
-    #     y=points[start]['lat'],
-    #     c='lightgreen',
-    #     s=100,
-    #     alpha=0.5
-    # )
+        if total_duration(tour, dur) < 220:
+            solution = {
+                'start': start,
+                'finish': finish,
+                'distance': total_distance(tour, dist),
+                'duration': total_duration(tour, dur),
+                'tour': tour
+            }
+            solutions.append(solution)
+    print(solutions)
+    """
 
-    # # end point
-    # ax.scatter(
-    #     x=points[finish]['lon'],
-    #     y=points[finish]['lat'],
-    #     c='tomato',
-    #     s=100,
-    #     alpha=0.5
-    # )
-    # ax.scatter(
-    #     x=[points[p]['lon'] for p in points.keys()],
-    #     y=[points[p]['lat'] for p in points.keys()],
-    #     c='black',
-    #     s=10
-    # )
 
-    # lines, = ax.plot(
-    #     [points[p]['lon'] for p in tour],
-    #     [points[p]['lat'] for p in tour],
-    #     '-',
-    #     alpha=0.5
-    # )
-
-    improvement = True
-    runs = 0
-    while improvement:
-        print('run', runs)
-        improvement = False
-        for i in range(1, len(tour)-2):
-            for j in range(i+1, len(tour)-1):
-                dist_original = dist[tour[i-1]][tour[i]] + \
-                    dist[tour[j]][tour[j+1]]
-                dist_test = dist[tour[i-1]][tour[j]] + dist[tour[i]][tour[j+1]]
-                if dist_test < dist_original:
-                    tour[i:j+1] = reversed(tour[i:j+1])
-
-                    # lines.set_data(
-                    #     [points[p]['lon'] for p in tour],
-                    #     [points[p]['lat'] for p in tour]
-                    # )
-                    # ax.set_title(
-                    #     f'total distance: {round(total_distance(tour), 1)} km total duration: {round(total_duration(tour), 1)} h'
-                    # )
-                    # plt.pause(0.0001)
-
-                    improvement = True
-        runs += 1
+    # ...or n randomized tours without set start and endpoint
+    for i in range(n):
+        tour = [i for i in range(1, 223)]
     
-    # plt.savefig(f'images/opt_distance/opt_distance_{start:03d}_{finish:03d}')
+        random.shuffle(tour)
+    
+        # 2 opt algorithm
+        tour = algorithm("twoOpt", tour, dur)
+    
+        start = tour[0]
+        finish = tour[-1]
+    
+        if total_distance(tour, dist) < 1200:
+            solution = {
+                'start': start,
+                'finish': finish,
+                'distance': total_distance(tour, dist),
+                'duration': total_duration(tour, dur),
+                'tour': tour
+            }
+            solutions.append(solution)
+            #drawNetworkFromTour(solution["tour"], "duration")
 
-    print('finished optimization')
-    # plt.show()
-    # plt.pause(1)
+    print(solutions)
 
-    solution = {
-        'start': start,
-        'finish': finish,
-        'distance': total_distance(tour),
-        'duration': total_duration(tour),
-        'tour': tour
-    }
+with open('2opt_240125.json', 'w') as f:
+    json.dump(solutions, f)
 
-    solutions.append(solution)
+print("--- %s seconds ---" % (time.time() - start_time))
 
-#with open('opt_distance_solutions.json', 'w') as f:
-#    json.dump(solutions, f)
+# tourEval('2opt.json')
+#distributionPlot('2opt830_2.json')
+
+# drawNetwork('2opt.json', "distance")
+# drawNetwork('2opt.json', "duration")

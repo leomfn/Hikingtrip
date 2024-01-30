@@ -52,7 +52,7 @@ with open('2opt830_interestingRegion1.json', 'w') as f:
 
 duplicateTours(solutions)
 
-tourmin = tourMin(solutions, "duration")
-tourmin = tourMin(solutions, "distance")
+tourmin = tour_min(solutions, "duration")
+tourmin = tour_min(solutions, "distance")
 #drawNetworkFromTour(tourmin, "duration")
 drawNetworkFromTour(tourmin, "distance")

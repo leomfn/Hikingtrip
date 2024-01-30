@@ -14,7 +14,7 @@ print("There are {} solutions.".format(len(data)))
 duplicateTours(data)
 
 #tourMin(data, "distance")
-tourMin(data, "duration")
+tour_min(data, "duration")
 
 #draws network
 drawNetwork(data, "duration")

@@ -53,7 +53,7 @@ def distributionPlot(path):
 
     plt.show()
 
-def tourMin(data, metric):
+def tour_min(data, metric):
     # tourdata can consist of many solutions, therefore extract the one with min duration and min distance
     tourdata_min = {}
 
@@ -64,12 +64,6 @@ def tourMin(data, metric):
             tourdata_min = tour
 
     tour = tourdata_min['tour']
-    start = tour[0]
-    finish = tour[-1]
-    # tour = tour[1:-1]
-    print(tourdata_min["tour"])
-    print(tourdata_min["distance"])
-    print(tourdata_min["duration"])
     drawNetworkFromTour(tourdata_min["tour"], "distance")
     return tour
 

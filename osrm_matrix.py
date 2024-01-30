@@ -32,8 +32,8 @@ print('status', r.status_code)
 
 # print(r.json().keys())
 
-#print('durations') # seconds
-#print(r.json()['durations'])
+print('durations') # seconds
+print(r.json()['durations'])
 
 print('distances') # meters
 print(r.json()['distances'])

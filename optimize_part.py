@@ -25,12 +25,11 @@ if decision == "R":
     #included_nodes = [172, 173, 211, 215, 216, 214, 213, 212, 210, 209, 222, 208, 219, 193, 175, 194, 176, 177, 195, 179, 197, 182, 61, 181, 199, 180, 204, 203, 200, 205, 86, 202, 201, 207]
     #included_nodes = [55, 172, 173, 211, 215, 216, 214, 213, 212, 210, 209, 222, 208, 219, 193, 175, 194, 176, 177, 195, 179, 197, 203, 182, 61, 181, 199, 180, 204, 207, 200, 202, 205, 86, 201]
     included_nodes = [174, 17, 15, 28, 27, 85, 29, 26, 25, 24, 23, 10, 22, 13, 21, 20, 14, 18, 156, 168, 136, 11, 9, 2, 8, 6, 16, 7, 30, 5, 4, 3, 1, 19, 169, 170, 122, 121, 120]
-
+    #included_nodes = [222, 209, 210, 212]
     for node in dict_edges:
         current_list = dict_edges[node]
         new_list = [x for x in current_list if x in included_nodes]
         dict_edges[node] = new_list
-    print(dict_edges)
 
 
 elif decision == "T1":
@@ -68,5 +67,5 @@ for tour in tours:
     result_time = (time.time() - start_time) / 3600
     print("%s seconds" % (result_time)) #in seconds
 
-    with open("solutions/tour_starting_" + str(starting_node) + ".json" , 'w') as f:
-        json.dump([tour, result_dur, result_dist, result_time], f)
+    #with open("solutions/tour_starting_" + str(starting_node) + ".json" , 'w') as f:
+    #    json.dump([tour, result_dur, result_dist, result_time], f)
